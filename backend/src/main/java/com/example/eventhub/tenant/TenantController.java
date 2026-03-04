@@ -15,9 +15,14 @@ public class TenantController {
     private final TenantService tenantService;
 
 
-    @GetMapping
-    public List<Tenant> getAllTenants() {
-        return tenantService.getAllTenants();
+    @GetMapping("/test")
+    public String test() {
+        return "Backend is working 🚀";
     }
+
+//    @GetMapping
+//    public List<Tenant> getAllTenants() {
+//        return tenantService.getAllTenants();
+//    }
 
 }

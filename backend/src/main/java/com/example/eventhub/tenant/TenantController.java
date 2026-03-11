@@ -20,9 +20,9 @@ public class TenantController {
         return "Backend is working 🚀";
     }
 
-//    @GetMapping
-//    public List<Tenant> getAllTenants() {
-//        return tenantService.getAllTenants();
-//    }
+    @GetMapping
+    public List<Tenant> getAllTenants() {
+        return tenantService.getAllTenants();
+    }
 
 }

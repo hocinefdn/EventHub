@@ -1,0 +1,36 @@
+<div class="event-container">
+  <div class="header">
+    <h1>Événements Disponibles</h1>
+    <a routerLink="new" class="btn-primary">Publier un événement</a>
+  </div>
+
+  <div *ngIf="loading" class="loader">Chargement des événements...</div>
+
+  <div *ngIf="errorMessage" class="error-banner">
+    {{ errorMessage }}
+  </div>
+
+  <div class="event-grid" *ngIf="!loading && events.length > 0">
+    <div class="event-card" *ngFor="let event of events">
+      <div class="card-content">
+        <h3>{{ event.title }}</h3>
+        <p class="description">{{ event.description }}</p>
+
+        <div class="event-details">
+          <span><strong>Date:</strong> {{ event.eventDate | date: 'short' }}</span>
+          <span><strong>Capacité:</strong> {{ event.maxParticipants }} places</span>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button [routerLink]="['/registrations', event.id]" class="btn-secondary">
+          S'inscrire
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && events.length === 0" class="empty-state">
+    <p>Aucun événement n'est disponible pour le moment.</p>
+  </div>
+</div>

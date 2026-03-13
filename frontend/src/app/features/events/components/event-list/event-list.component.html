@@ -1,36 +1,147 @@
-<div class="event-container">
-  <div class="header">
-    <h1>Événements Disponibles</h1>
-    <a routerLink="new" class="btn-primary">Publier un événement</a>
+<div class="el-wrap">
+  <div class="el-header">
+    <div class="el-header-left">
+      <h2 class="el-title">Événements</h2>
+      <span class="el-count">{{ count() }} event{{ count() !== 1 ? 's' : '' }}</span>
+    </div>
+    <button class="el-add-btn" (click)="openAddForm()">
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 14 14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      >
+        <line x1="7" y1="2" x2="7" y2="12" />
+        <line x1="2" y1="7" x2="12" y2="7" />
+      </svg>
+      Ajouter
+    </button>
   </div>
 
-  <div *ngIf="loading" class="loader">Chargement des événements...</div>
-
-  <div *ngIf="errorMessage" class="error-banner">
-    {{ errorMessage }}
-  </div>
-
-  <div class="event-grid" *ngIf="!loading && events.length > 0">
-    <div class="event-card" *ngFor="let event of events">
-      <div class="card-content">
-        <h3>{{ event.title }}</h3>
-        <p class="description">{{ event.description }}</p>
-
-        <div class="event-details">
-          <span><strong>Date:</strong> {{ event.eventDate | date: 'short' }}</span>
-          <span><strong>Capacité:</strong> {{ event.maxParticipants }} places</span>
-        </div>
+  @if (showAddForm()) {
+    <div class="el-form">
+      <div class="el-form-fields">
+        <input
+          class="el-input"
+          type="text"
+          placeholder="Nom de l'événement"
+          [(ngModel)]="newEvent.title"
+        />
+        <input class="el-input" type="date" [(ngModel)]="newEvent.eventDate" />
+        <!-- <input
+          class="el-input"
+          type="number"
+          placeholder="Nombre maximum de participants"
+          [(ngModel)]="newEvent.maxParticipants"
+        /> -->
       </div>
-
-      <div class="card-actions">
-        <button [routerLink]="['/registrations', event.id]" class="btn-secondary">
-          S'inscrire
-        </button>
+      <div class="el-form-actions">
+        <button class="el-btn-text" (click)="cancelAdd()">Annuler</button>
+        <button class="el-btn-primary" (click)="submitAdd()">Confirmer</button>
       </div>
     </div>
+  }
+
+  <div class="el-list">
+    @if (events().length === 0) {
+      <div class="el-empty">Aucun événement pour le moment</div>
+    }
+
+    @for (event of events(); track event.id) {
+      <div class="el-item" [class.el-item--editing]="editingEvent()?.id === event.id">
+        @if (editingEvent()?.id === event.id) {
+          <div class="el-edit-form">
+            <div class="el-form-fields">
+              <input
+                class="el-input"
+                type="text"
+                placeholder="Nom"
+                [(ngModel)]="editingEvent()!.title"
+              />
+              <input class="el-input" type="date" [(ngModel)]="editingEvent()!.eventDate" />
+              <input
+                class="el-input"
+                type="number"
+                placeholder="Nombre maximum de participants"
+                [(ngModel)]="editingEvent()!.maxParticipants"
+              />
+            </div>
+            <div class="el-form-actions">
+              <button class="el-btn-text" (click)="cancelEdit()">Annuler</button>
+              <button class="el-btn-primary" (click)="submitEdit()">Enregistrer</button>
+            </div>
+          </div>
+        } @else {
+          <div class="el-date-block">
+            <span class="el-date-day">{{ getDay(event.eventDate) }}</span>
+            <span class="el-date-mon">{{ getMonth(event.eventDate) }}</span>
+          </div>
+
+          <div class="el-info">
+            <p class="el-name">{{ event.title }}</p>
+            <p class="el-meta">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M6 1C4.07 1 2.5 2.57 2.5 4.5c0 2.75 3.5 6.5 3.5 6.5s3.5-3.75 3.5-6.5C9.5 2.57 7.93 1 6 1z"
+                />
+                <circle cx="6" cy="4.5" r="1.2" />
+              </svg>
+              {{ event.description }}
+            </p>
+          </div>
+
+          <div class="el-actions">
+            <button class="el-icon-btn" title="Modifier" (click)="startEdit(event)">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" />
+              </svg>
+            </button>
+            <button
+              class="el-icon-btn el-icon-btn--danger"
+              title="Supprimer"
+              (click)="delete(event)"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M2 3.5h10M5 3.5V2.5h4v1M5.5 6v4M8.5 6v4M3 3.5l.7 7.5h6.6L11 3.5" />
+              </svg>
+            </button>
+          </div>
+        }
+      </div>
+    }
   </div>
 
-  <div *ngIf="!loading && events.length === 0" class="empty-state">
-    <p>Aucun événement n'est disponible pour le moment.</p>
-  </div>
+  @if (toast()) {
+    <div class="el-toast">{{ toast() }}</div>
+  }
 </div>

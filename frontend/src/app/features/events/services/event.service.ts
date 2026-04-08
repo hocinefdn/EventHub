@@ -2,6 +2,8 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Event } from '../models/event.model';
+import { formatDate } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,17 +20,26 @@ export class EventService {
   loadEvents(): void {
     this.http.get<Event[]>(this.apiUrl).subscribe({
       next: (data) => {
-        (this._events.set(data), console.log(data));
+        this._events.set(data);
       },
       error: (err) => console.error('Erreur chargement events', err),
     });
   }
 
   add(event: Omit<Event, 'id'>): void {
-    this.http.post<Event>(this.apiUrl, event).subscribe({
+    const formattedEvent = {
+      ...event,
+      eventDate: formatDate(event.eventDate, 'yyyy-MM-ddTHH:mm:ss', 'en-US'),
+    };
+
+    this.http.post<Event>(this.apiUrl, formattedEvent).subscribe({
       next: (created) => this._events.update((list) => [...list, created]),
       error: (err) => console.error('Erreur ajout event', err),
     });
+  }
+
+  getById(id: number): Observable<Event> {
+    return this.http.get<Event>(`${this.apiUrl}/${id}`);
   }
 
   update(updated: Event): void {

@@ -30,13 +30,18 @@
           placeholder="Nom de l'événement"
           [(ngModel)]="newEvent.title"
         />
-        <input class="el-input" type="date" [(ngModel)]="newEvent.eventDate" />
-        <!-- <input
+        <input
+          placeholder="Date de l'événement"
+          class="el-input"
+          type="date"
+          [(ngModel)]="newEvent.eventDate"
+        />
+        <input
           class="el-input"
           type="number"
           placeholder="Nombre maximum de participants"
           [(ngModel)]="newEvent.maxParticipants"
-        /> -->
+        />
       </div>
       <div class="el-form-actions">
         <button class="el-btn-text" (click)="cancelAdd()">Annuler</button>
@@ -61,7 +66,12 @@
                 placeholder="Nom"
                 [(ngModel)]="editingEvent()!.title"
               />
-              <input class="el-input" type="date" [(ngModel)]="editingEvent()!.eventDate" />
+              <input
+                placeholder="Date de l'événement"
+                class="el-input"
+                type="date"
+                [(ngModel)]="editingEvent()!.eventDate"
+              />
               <input
                 class="el-input"
                 type="number"
@@ -81,7 +91,9 @@
           </div>
 
           <div class="el-info">
-            <p class="el-name">{{ event.title }}</p>
+            <a [routerLink]="['/events', event.id]" class="el-name hover:underline cursor-pointer">
+              {{ event.title }}
+            </a>
             <p class="el-meta">
               <svg
                 width="12"

@@ -18,6 +18,7 @@ public class EventService {
 
     public EventResponse createEvent(EventRequest request) {
         Event event = eventMapper.toEntity(request);
+        System.out.println(event);
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
     }

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,7 +62,7 @@ export class EventListComponent {
   }
 
   submitAdd(): void {
-    if (!this.newEvent.title || !this.newEvent.eventDate) return;
+    if (!this.newEvent.title || !this.newEvent.eventDate || !this.newEvent.maxParticipants) return;
     this.eventService.add({ ...this.newEvent });
     this.showAddForm.set(false);
     this.showToast('Événement ajouté');

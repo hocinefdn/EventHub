@@ -14,6 +14,8 @@ public record EventRequest(
         @NotNull(message = "Event date is required")
         LocalDateTime eventDate,
 
+        Integer maxParticipants,
+
         String location) {
 
 

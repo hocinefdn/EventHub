@@ -17,18 +17,19 @@ public class EventService {
     private final EventMapper eventMapper;
 
     public EventResponse createEvent(EventRequest request) {
-        //System.out.println(request);
         Event event = eventMapper.toEntity(request);
-        System.out.println(event);
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
     }
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public List<EventResponse> getAllEvents() {
+        return eventMapper.toResponseList(eventRepository.findAll());
     }
 
-    public Optional<Event> getEventById(Long id) {
-        return eventRepository.findById(id);
+    public EventResponse getEventById(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        return eventMapper.toResponse(event);
     }
 }

@@ -61,7 +61,7 @@ export class EventListComponent {
   }
 
   submitAdd(): void {
-    if (!this.newEvent.title || !this.newEvent.description || !this.newEvent.eventDate) return;
+    if (!this.newEvent.title || !this.newEvent.eventDate) return;
     this.eventService.add({ ...this.newEvent });
     this.showAddForm.set(false);
     this.showToast('Événement ajouté');

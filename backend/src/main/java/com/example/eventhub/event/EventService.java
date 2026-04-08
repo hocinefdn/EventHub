@@ -1,5 +1,8 @@
 package com.example.eventhub.event;
 
+import com.example.eventhub.event.dto.request.EventRequest;
+import com.example.eventhub.event.dto.response.EventResponse;
+import com.example.eventhub.event.mappers.EventMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +14,14 @@ import java.util.Optional;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final EventMapper eventMapper;
 
-    public Event createEvent(Event event) {
-        // Logique métier : on peut forcer un statut par défaut ici
-        return eventRepository.save(event);
+    public EventResponse createEvent(EventRequest request) {
+        //System.out.println(request);
+        Event event = eventMapper.toEntity(request);
+        System.out.println(event);
+        Event saved = eventRepository.save(event);
+        return eventMapper.toResponse(saved);
     }
 
     public List<Event> getAllEvents() {

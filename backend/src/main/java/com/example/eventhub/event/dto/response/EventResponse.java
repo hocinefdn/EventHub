@@ -7,7 +7,8 @@ public record EventResponse(
         Long id,
         String title,
         String description,
-        LocalDateTime date,
+        LocalDateTime eventDate,
+        Integer maxParticipants,
         String location
 
 ) {

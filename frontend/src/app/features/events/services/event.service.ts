@@ -20,7 +20,6 @@ export class EventService {
   loadEvents(): void {
     this.http.get<Event[]>(this.apiUrl).subscribe({
       next: (data) => {
-        console.log(data);
         this._events.set(data);
       },
       error: (err) => console.error('Erreur chargement events', err),

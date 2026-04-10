@@ -3,8 +3,7 @@ package com.example.eventhub.event.mappers;
 import com.example.eventhub.event.Event;
 import com.example.eventhub.event.dto.request.EventRequest;
 import com.example.eventhub.event.dto.response.EventResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -18,4 +17,8 @@ public interface EventMapper {
     EventResponse toResponse(Event event);
 
     List<EventResponse> toResponseList(List<Event> events);
+
+    // 🔥 UPDATE PARTIEL
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEventFromRequest(EventRequest request, @MappingTarget Event event);
 }

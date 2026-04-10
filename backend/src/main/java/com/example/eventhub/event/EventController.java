@@ -45,4 +45,18 @@ public class EventController {
     public ResponseEntity<EventResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.getEventById(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EventResponse> update(
+            @PathVariable Long id,
+            @RequestBody EventRequest request
+    ) {
+        return ResponseEntity.ok(eventService.updateEvent(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        eventService.deleteEvent(id);
+        return ResponseEntity.noContent().build();
+    }
 }

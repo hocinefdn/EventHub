@@ -91,7 +91,10 @@
           </div>
 
           <div class="el-info">
-            <a [routerLink]="['/events', event.id]" class="el-name hover:underline cursor-pointer">
+            <a
+              [routerLink]="['/admin/events', event.id]"
+              class="el-name hover:underline cursor-pointer"
+            >
               {{ event.title }}
             </a>
             <p class="el-meta">

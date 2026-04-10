@@ -20,6 +20,7 @@ export class EventService {
   loadEvents(): void {
     this.http.get<Event[]>(this.apiUrl).subscribe({
       next: (data) => {
+        console.log(data);
         this._events.set(data);
       },
       error: (err) => console.error('Erreur chargement events', err),
@@ -43,7 +44,11 @@ export class EventService {
   }
 
   update(updated: Event): void {
-    this.http.put<Event>(`${this.apiUrl}/${updated.id}`, updated).subscribe({
+    const formattedEvent = {
+      ...updated,
+      eventDate: formatDate(updated.eventDate, 'yyyy-MM-ddTHH:mm:ss', 'en-US'),
+    };
+    this.http.put<Event>(`${this.apiUrl}/${updated.id}`, formattedEvent).subscribe({
       next: (saved) =>
         this._events.update((list) => list.map((e) => (e.id === saved.id ? saved : e))),
       error: (err) => console.error('Erreur mise à jour event', err),

@@ -4,7 +4,9 @@ import com.example.eventhub.event.dto.request.EventRequest;
 import com.example.eventhub.event.dto.response.EventResponse;
 import com.example.eventhub.event.mappers.EventMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,4 +35,27 @@ public class EventService {
 
         return eventMapper.toResponse(event);
     }
+
+    public EventResponse updateEvent(Long id, EventRequest request) {
+
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+
+        // 🔥 mapping partiel
+        eventMapper.updateEventFromRequest(request, event);
+
+        Event updated = eventRepository.save(event);
+
+        return eventMapper.toResponse(updated);
+    }
+
+    public void deleteEvent(Long id) {
+        if (!eventRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
+        }
+
+        eventRepository.deleteById(id);
+    }
+
+
 }

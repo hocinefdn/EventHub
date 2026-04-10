@@ -69,6 +69,7 @@ export class EventListComponent {
   }
 
   startEdit(event: Event): void {
+    console.log(event);
     this.editingEvent.set({ ...event });
     this.showAddForm.set(false);
   }
@@ -79,7 +80,7 @@ export class EventListComponent {
 
   submitEdit(): void {
     const ev = this.editingEvent();
-    if (!ev || !ev.title || !ev.description || !ev.eventDate) return;
+    if (!ev || !ev.title || !ev.eventDate || !ev.maxParticipants) return;
     this.eventService.update(ev);
     this.editingEvent.set(null);
     this.showToast('Événement modifié');

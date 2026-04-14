@@ -18,6 +18,8 @@ public interface EventMapper {
 
     List<EventResponse> toResponseList(List<Event> events);
 
+    Event toEntityFromResponse(EventResponse response);
+
     // 🔥 UPDATE PARTIEL
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEventFromRequest(EventRequest request, @MappingTarget Event event);

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.model';
 import { RouterLink } from '@angular/router';
+import { EventForm } from '../event-form/event-form';
 
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, EventForm],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,8 +23,6 @@ export class EventListComponent {
   editingEvent = signal<Event | null>(null);
   showAddForm = signal(false);
   toast = signal<string | null>(null);
-
-  newEvent: Omit<Event, 'id'> = { title: '', description: '', eventDate: '', maxParticipants: 0 };
 
   readonly MONTHS = [
     'jan',
@@ -52,7 +51,6 @@ export class EventListComponent {
   }
 
   openAddForm(): void {
-    this.newEvent = { title: '', description: '', eventDate: '', maxParticipants: 0 };
     this.showAddForm.set(true);
     this.editingEvent.set(null);
   }
@@ -62,8 +60,6 @@ export class EventListComponent {
   }
 
   submitAdd(): void {
-    if (!this.newEvent.title || !this.newEvent.eventDate || !this.newEvent.maxParticipants) return;
-    this.eventService.add({ ...this.newEvent });
     this.showAddForm.set(false);
     this.showToast('Événement ajouté');
   }

@@ -21,15 +21,15 @@
     </button>
   </div>
 
-  @if (showAddForm()) {
-    <app-event-form (close)="cancelAdd()" (saveSuccess)="submitAdd()" />
+  @if (showAddForm() || editingEvent()) {
+    <app-event-form
+      (close)="cancelAdd()"
+      (saveSuccess)="editingEvent() ? submitEdit() : submitAdd()"
+      [eventData]="editingEvent()"
+    />
   }
 
   <div class="el-list">
-    @if (events().length === 0) {
-      <div class="el-empty">Aucun événement pour le moment</div>
-    }
-
     <!-- Your Data Grid container -->
     <ag-grid-angular
       class="ag-theme-quartz"

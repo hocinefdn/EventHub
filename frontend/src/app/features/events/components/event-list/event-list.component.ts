@@ -7,11 +7,18 @@ import { RouterLink } from '@angular/router';
 import { EventForm } from '../event-form/event-form';
 import { AgGridAngular } from 'ag-grid-angular'; // Import du composant
 import { ColDef } from 'ag-grid-community';
-import { ActionButtons } from '../../../../shared/action-buttons/action-buttons'; // Import du composant d'action
+import { ActionButtonsComponent } from '../../../../shared/action-buttons/action-buttons'; // Import du composant d'action
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, EventForm, AgGridAngular, ActionButtons],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    EventForm,
+    AgGridAngular,
+    ActionButtonsComponent,
+  ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,7 +67,7 @@ export class EventListComponent {
     { field: 'participants', headerName: 'Max' },
     {
       headerName: 'Actions',
-      cellRenderer: ActionButtons,
+      cellRenderer: ActionButtonsComponent,
     },
   ]);
 

@@ -5,11 +5,13 @@ import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.model';
 import { RouterLink } from '@angular/router';
 import { EventForm } from '../event-form/event-form';
-
+import { AgGridAngular } from 'ag-grid-angular'; // Import du composant
+import { ColDef } from 'ag-grid-community';
+import { ActionButtons } from '../../../../shared/action-buttons/action-buttons'; // Import du composant d'action
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, EventForm],
+  imports: [CommonModule, FormsModule, RouterLink, EventForm, AgGridAngular, ActionButtons],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +25,10 @@ export class EventListComponent {
   editingEvent = signal<Event | null>(null);
   showAddForm = signal(false);
   toast = signal<string | null>(null);
+
+  context = {
+    componentParent: this,
+  };
 
   readonly MONTHS = [
     'jan',
@@ -38,6 +44,25 @@ export class EventListComponent {
     'nov',
     'déc',
   ];
+
+  rowData = computed(() =>
+    this.events().map((ev) => ({
+      title: ev.title,
+      date: ev.eventDate,
+      participants: ev.maxParticipants,
+      raw: ev,
+    })),
+  );
+
+  columnDefs = signal<ColDef[]>([
+    { field: 'title', headerName: 'Événement' },
+    { field: 'date', headerName: 'Date' },
+    { field: 'participants', headerName: 'Max' },
+    {
+      headerName: 'Actions',
+      cellRenderer: ActionButtons,
+    },
+  ]);
 
   ngOnInit(): void {
     this.eventService.loadEvents();
@@ -65,7 +90,6 @@ export class EventListComponent {
   }
 
   startEdit(event: Event): void {
-    console.log(event);
     this.editingEvent.set({ ...event });
     this.showAddForm.set(false);
   }

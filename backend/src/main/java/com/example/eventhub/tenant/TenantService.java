@@ -9,9 +9,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TenantService {
 
-    //private final TenantRepository tenantRepository;
+    private final TenantRepository tenantRepository;
 
-    //public List<Tenant> getAllTenants() {
-    //    return tenantRepository.findAll();
-    //}
+    public List<Tenant> getAllTenants() {
+        return tenantRepository.findAll();
+    }
 }

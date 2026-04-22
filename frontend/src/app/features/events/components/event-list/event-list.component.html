@@ -1,0 +1,46 @@
+<div class="el-wrap">
+  <div class="el-header">
+    <div class="el-header-left">
+      <h2 class="el-title">Événements</h2>
+      <span class="el-count">{{ count() }} event{{ count() !== 1 ? 's' : '' }}</span>
+    </div>
+    <button class="el-add-btn" (click)="openAddForm()">
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 14 14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      >
+        <line x1="7" y1="2" x2="7" y2="12" />
+        <line x1="2" y1="7" x2="12" y2="7" />
+      </svg>
+      Ajouter
+    </button>
+  </div>
+
+  @if (showAddForm() || editingEvent()) {
+    <app-event-form
+      (close)="cancelAdd()"
+      (saveSuccess)="editingEvent() ? submitEdit() : submitAdd()"
+      [eventData]="editingEvent()"
+    />
+  }
+
+  <div class="el-list">
+    <!-- Your Data Grid container -->
+    <ag-grid-angular
+      class="ag-theme-quartz"
+      [rowData]="rowData()"
+      [columnDefs]="columnDefs()"
+      [context]="context"
+    >
+    </ag-grid-angular>
+  </div>
+
+  @if (toast()) {
+    <div class="el-toast">{{ toast() }}</div>
+  }
+</div>

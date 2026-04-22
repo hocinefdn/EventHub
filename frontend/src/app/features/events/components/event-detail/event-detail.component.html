@@ -1,0 +1,20 @@
+<div class="event-detail-container" *ngIf="loading()">
+  <p>Loading event...</p>
+</div>
+
+<div class="event-detail-container" *ngIf="error()">
+  <p class="error">{{ error() }}</p>
+  <button (click)="goBack()" class="btn-back">← Back</button>
+</div>
+
+<div class="event-detail-container" *ngIf="event()">
+  <h1 class="event-title">{{ event()!.title }}</h1>
+  <p class="event-date">
+    📅 {{ event()!.eventDate | date: 'fullDate' }} à {{ event()!.eventDate | date: 'shortTime' }}
+  </p>
+  <p class="event-description">{{ event()!.description }}</p>
+
+  <div class="actions">
+    <button (click)="goBack()" class="btn-back">← Back</button>
+  </div>
+</div>

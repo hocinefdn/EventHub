@@ -1,0 +1,21 @@
+<div class="el-form">
+  <div class="el-form-fields">
+    <input class="el-input" type="text" placeholder="Nom de l'événement" [(ngModel)]="form.title" />
+    <input
+      placeholder="Date de l'événement"
+      class="el-input"
+      type="date"
+      [(ngModel)]="form.eventDate"
+    />
+    <input
+      class="el-input"
+      type="number"
+      placeholder="Nombre maximum de participants"
+      [(ngModel)]="form.maxParticipants"
+    />
+  </div>
+  <div class="el-form-actions">
+    <button class="el-btn-text" (click)="cancel()">Annuler</button>
+    <button class="el-btn-primary" (click)="submit()">Confirmer</button>
+  </div>
+</div>

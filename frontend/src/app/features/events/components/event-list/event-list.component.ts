@@ -29,6 +29,9 @@ export class EventListComponent {
   readonly events = this.eventService.events;
   readonly count = computed(() => this.events().length);
 
+  readonly currentPage = this.eventService.currentPage;
+  readonly totalPages = this.eventService.totalPages;
+
   editingEvent = signal<Event | null>(null);
   showAddForm = signal(false);
   toast = signal<string | null>(null);
@@ -72,7 +75,7 @@ export class EventListComponent {
   ]);
 
   ngOnInit(): void {
-    this.eventService.loadEvents();
+    this.eventService.loadEvents(0);
   }
   getDay(dateStr: string): number {
     return new Date(dateStr + 'T00:00:00').getDate();
@@ -121,5 +124,21 @@ export class EventListComponent {
   private showToast(msg: string): void {
     this.toast.set(msg);
     setTimeout(() => this.toast.set(null), 2500);
+  }
+
+  nextPage(): void {
+    const next = this.currentPage() + 1;
+
+    if (next < this.totalPages()) {
+      this.eventService.loadEvents(next);
+    }
+  }
+
+  prevPage(): void {
+    const prev = this.currentPage() - 1;
+
+    if (prev >= 0) {
+      this.eventService.loadEvents(prev);
+    }
   }
 }

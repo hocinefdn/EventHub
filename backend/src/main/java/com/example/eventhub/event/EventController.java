@@ -4,6 +4,8 @@ import com.example.eventhub.event.dto.request.EventRequest;
 import com.example.eventhub.event.dto.response.EventResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -37,10 +39,9 @@ public class EventController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EventResponse>> getAll() {
-        return ResponseEntity.ok(eventService.getAllEvents());
+    public ResponseEntity<Page<EventResponse>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(eventService.getAllEvents(pageable));
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<EventResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.getEventById(id));

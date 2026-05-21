@@ -4,6 +4,7 @@ import { inject } from '@angular/core';
 import { Event } from '../models/event.model';
 import { formatDate } from '@angular/common';
 import { Observable } from 'rxjs';
+import { Page } from '../../../shared/models/page.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,13 +15,16 @@ export class EventService {
 
   private _events = signal<Event[]>([]);
   readonly events = this._events.asReadonly();
-
+  totalPages = signal(0);
+  currentPage = signal(0);
   private nextId = 1;
 
-  loadEvents(): void {
-    this.http.get<Event[]>(this.apiUrl).subscribe({
-      next: (data) => {
-        this._events.set(data);
+  loadEvents(page: number = 0, size: number = 10): void {
+    this.http.get<Page<Event>>(`${this.apiUrl}?page=${page}&size=${size}`).subscribe({
+      next: (res) => {
+        this._events.set(res.content);
+        this.totalPages.set(res.totalPages);
+        this.currentPage.set(res.number);
       },
       error: (err) => console.error('Erreur chargement events', err),
     });
